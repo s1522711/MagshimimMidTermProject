@@ -23,6 +23,7 @@
 #define HARD_GUESSES 10 // the number of guesses for the hard difficulty
 #define CRAZY_GUESSES_MIN 5 // the minimum number of guesses for the crazy difficulty
 #define CRAZY_GUESSES_MAX 25 // the maximum number of guesses for the crazy difficulty
+#define REALLY_BIG_NUMBER 10000000 // a really big number, used for the loading animation
 
 enum DifficultyEnum {EASY = 1, MODERATE, HARD, CRAZY}; // enum for the difficulty levels
 enum DifficultyEnum difficulty = EASY; // global difficulty var, default difficulty is easy, will be changed by the user
@@ -138,7 +139,7 @@ int createCode()
     // make sure there are no repeating digits
     while (thousandDigit/MIN_THOUSAND_DIGIT == hundredsDigit/MIN_HUNDREDS_DIGIT || thousandDigit/MIN_THOUSAND_DIGIT == tensDigit/MIN_TENS_DIGIT || thousandDigit/MIN_THOUSAND_DIGIT == onesDigit || hundredsDigit/MIN_HUNDREDS_DIGIT == tensDigit/MIN_TENS_DIGIT || hundredsDigit/MIN_HUNDREDS_DIGIT == onesDigit || tensDigit/MIN_TENS_DIGIT == onesDigit)
     {
-        if (loadingCounter % 10000000 == 0) // print the loading animation every 60 iterations
+        if (loadingCounter % REALLY_BIG_NUMBER == 0) // print the loading animation every 60 iterations
         {
             printf(".");
         }
@@ -155,12 +156,12 @@ bool codeInputCheck(char digit1, char digit2, char digit3, char digit4)
 {
     if (digit1 < '1' || digit1 > '6' || digit2 < '1' || digit2 > '6' || digit3 < '1' || digit3 > '6' || digit4 < '1' || digit4 > '6') // if the input is not in the range of 1-6
     {
-        printf("Only 1-6 are allowed, try again!\nWrite your guess (only 1-6, no ENTER is needed)\n%d guesses left\n", guessesLeft);
+        printf("Only 1-6 are allowed, try again!\nWrite your guess (only 1-6, no ENTER is needed)\n");
         return false;
     }
     if (digit1 == digit2 || digit1 == digit3 || digit1 == digit4 || digit2 == digit3 || digit2 == digit4 || digit3 == digit4) // if the input has repeating digits
     {
-        printf("No repeating digits are allowed, try again!\nWrite your guess (only 1-6, no ENTER is needed)\n%d guesses left\n", guessesLeft);
+        printf("No repeating digits are allowed, try again!\nWrite your guess (only 1-6, no ENTER is needed)\n");
         return false;
     }
     return true; // if the input is valid
@@ -212,16 +213,16 @@ void playerTurn()
 
         printf("\nWrite your guess (only 1-6, no ENTER is needed)\n");
 
-        if (difficulty != CRAZY || DEBUG) // if the difficulty is not crazy/the debug mode isn't enabled print the number of guesses left
-        {
-            printf("%d guesses left\n", guessesLeft);
-        } else // if the difficulty is crazy and the debug mode is enabled print the secret code
-        {
-            printf("CRAZY MODE!!!\n");
-        }
-
         do
         {
+            if (difficulty != CRAZY || DEBUG) // if the difficulty is not crazy/the debug mode isn't enabled print the number of guesses left
+            {
+                printf("%d guesses left\n", guessesLeft);
+            } else // if the difficulty is crazy and the debug mode is enabled print the secret code
+            {
+                printf("CRAZY MODE!!!\n");
+            }
+
             digit1 = getch(); // get the user's input
             printf("%d", digit1 - '0'); // print the user's input
             digit2 = getch();
