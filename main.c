@@ -23,7 +23,6 @@
 #define HARD_GUESSES 10 // the number of guesses for the hard difficulty
 #define CRAZY_GUESSES_MIN 5 // the minimum number of guesses for the crazy difficulty
 #define CRAZY_GUESSES_MAX 25 // the maximum number of guesses for the crazy difficulty
-#define REALLY_BIG_NUMBER 10000000 // a really big number, used for the loading animation
 
 enum DifficultyEnum {EASY = 1, MODERATE, HARD, CRAZY}; // enum for the difficulty levels
 enum DifficultyEnum difficulty = EASY; // global difficulty var, default difficulty is easy, will be changed by the user
@@ -46,7 +45,9 @@ bool codeInputCheck(char digit1, char digit2, char digit3, char digit4);
 void replayQuestion();
 
 
-int main() {
+int main()
+{
+    srand(time(NULL)); // seed the random number generator
     while (gameMode != EXIT) // while the game mode is not exit
     {
         switch (gameMode) // check the game mode
@@ -59,11 +60,11 @@ int main() {
                 break;
             case WIN: // if the game mode is win
                 winScreen(); // call the win screen function
-                replayQuestion();
+                replayQuestion(); // ask the user if they want to play again
                 break;
             case FAIL: // if the game mode is fail
                 failScreen(); // call the fail screen function
-                replayQuestion();
+                replayQuestion(); // ask the user if they want to play again
                 break;
             default: // if something breaks assume the game mode is menu
                 menu();
@@ -78,13 +79,13 @@ int main() {
  * input: the minimum and the maximum numbers for the generation
  * output: randomly generated int in the range given
  */
-int randr(int min, int max) {
-    srand(time(NULL));
+int randr(int min, int max)
+{
     return rand() % (max - min + 1) + min;
 }
 
 /*
- * this fuction prints the menu and gets the user's input
+ * this function prints the menu and gets the user's input
  * input: none
  * output: none
  */
@@ -103,7 +104,7 @@ void menu()
     do
     {
         scanf("%d", &difficulty);
-    } while (!menuInputCheck(difficulty));
+    } while (!menuInputCheck(difficulty)); // check if the input is valid
     gameMode = GAME; // set the game mode to game
 }
 
@@ -134,16 +135,10 @@ int createCode()
     int hundredsDigit = randr(MIN_HUNDREDS_DIGIT, MAX_HUNDREDS_DIGIT);
     int tensDigit = randr(MIN_TENS_DIGIT,MAX_TENS_DIGIT);
     int onesDigit = randr(MIN_ONES_DIGIT,MAX_ONES_DIGIT);
-    int loadingCounter = 0; // a counter for the loading animation
-    printf("Generating secret code");
+
     // make sure there are no repeating digits
     while (thousandDigit/MIN_THOUSAND_DIGIT == hundredsDigit/MIN_HUNDREDS_DIGIT || thousandDigit/MIN_THOUSAND_DIGIT == tensDigit/MIN_TENS_DIGIT || thousandDigit/MIN_THOUSAND_DIGIT == onesDigit || hundredsDigit/MIN_HUNDREDS_DIGIT == tensDigit/MIN_TENS_DIGIT || hundredsDigit/MIN_HUNDREDS_DIGIT == onesDigit || tensDigit/MIN_TENS_DIGIT == onesDigit)
     {
-        if (loadingCounter % REALLY_BIG_NUMBER == 0) // print the loading animation every 60 iterations
-        {
-            printf(".");
-        }
-        loadingCounter++;
         thousandDigit = randr(MIN_THOUSAND_DIGIT, MAX_THOUSAND_DIGIT);
         hundredsDigit = randr(MIN_HUNDREDS_DIGIT, MAX_HUNDREDS_DIGIT);
         tensDigit = randr(MIN_TENS_DIGIT,MAX_TENS_DIGIT);
@@ -152,6 +147,11 @@ int createCode()
     return (thousandDigit/MIN_THOUSAND_DIGIT*MIN_THOUSAND_DIGIT)+(hundredsDigit/MIN_HUNDREDS_DIGIT*MIN_HUNDREDS_DIGIT)+(tensDigit/MIN_TENS_DIGIT*MIN_TENS_DIGIT)+onesDigit; // return the secret code
 }
 
+/*
+ * this function checks if the user's input is valid during the game
+ * input: the user's input
+ * output: true if the input is valid, false otherwise
+ */
 bool codeInputCheck(char digit1, char digit2, char digit3, char digit4)
 {
     if (digit1 < '1' || digit1 > '6' || digit2 < '1' || digit2 > '6' || digit3 < '1' || digit3 > '6' || digit4 < '1' || digit4 > '6') // if the input is not in the range of 1-6
@@ -167,6 +167,11 @@ bool codeInputCheck(char digit1, char digit2, char digit3, char digit4)
     return true; // if the input is valid
 }
 
+/*
+ * this function sets up the game
+ * input: none
+ * output: none
+ */
 void playerSetup()
 {
     gameMode = GAME; // set the game mode to game
@@ -203,6 +208,11 @@ void playerSetup()
     playerTurn(); // start the game
 }
 
+/*
+ * this function is the player's turn
+ * input: none
+ * output: none
+ */
 void playerTurn()
 {
     while (gameMode == GAME) // while the game mode is game (the user didn't win or lose yet)
@@ -218,19 +228,21 @@ void playerTurn()
             if (difficulty != CRAZY || DEBUG) // if the difficulty is not crazy/the debug mode isn't enabled print the number of guesses left
             {
                 printf("%d guesses left\n", guessesLeft);
-            } else // if the difficulty is crazy and the debug mode is enabled print the secret code
+            }
+            else // if the difficulty is crazy and the debug mode is enabled print the secret code
             {
                 printf("CRAZY MODE!!!\n");
             }
 
             digit1 = getch(); // get the user's input
-            printf("%d", digit1 - '0'); // print the user's input
+            putchar(digit1); // print the user's input
             digit2 = getch();
-            printf("%d", digit2 - '0');
+            putchar(digit2);
             digit3 = getch();
-            printf("%d", digit3 - '0');
+            putchar(digit3);
             digit4 = getch();
-            printf("%d\n", digit4 - '0');
+            putchar(digit4);
+            printf("\n"); // print a new line
         } while (!codeInputCheck(digit1, digit2, digit3, digit4)); // check if the input is valid
         guess = (digit1 - '0') * MIN_THOUSAND_DIGIT + (digit2 - '0') * MIN_HUNDREDS_DIGIT + (digit3 - '0') * MIN_TENS_DIGIT + (digit4 - '0'); // convert the user's input to an int
 
@@ -293,6 +305,11 @@ void playerTurn()
     }
 }
 
+/*
+ * this function prints the win screen
+ * input: none
+ * output: none
+ */
 void winScreen()
 {
     gameMode = WIN; // set the game mode to win
@@ -303,6 +320,11 @@ void winScreen()
 
 }
 
+/*
+ * this function prints the fail screen
+ * input: none
+ * output: none
+ */
 void failScreen()
 {
     gameMode = FAIL; // set the game mode to fail
@@ -313,6 +335,11 @@ void failScreen()
     printf("The secret password was %d\n\n", secretCode);
 }
 
+/*
+ * this function asks the user if they want to play again
+ * input: none
+ * output: none
+ */
 void replayQuestion()
 {
     char input = ' ';
