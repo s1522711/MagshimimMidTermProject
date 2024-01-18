@@ -1,3 +1,0 @@
-C:/Users/Cyber_User/CLionProjects/cyberMidTermProject/cmake-build-debug/CMakeFiles/cyberMidTermProject.dir
-C:/Users/Cyber_User/CLionProjects/cyberMidTermProject/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/Cyber_User/CLionProjects/cyberMidTermProject/cmake-build-debug/CMakeFiles/rebuild_cache.dir

@@ -316,8 +316,12 @@ void winScreen()
     // ascii art of an award
     printf("                     _ /\\.'|_\n                 _.-| |\\ | / |_\n                / \\ _>-\"\"\"-._.'|_\n               >`-.'         `./ \\\n              /`./             \\-<\n              `-|               |_/\n              /_|               |_\\\n              ) |               | |\n              -<|               |\\/\n              `'_\\             /`<\n               |_/`.         .'\\_/\n                \\_/ >-.._..-'\\_|\n                  `-`_| \\_\\|_/\n                   |   `' |  |\n                   |      |  |\n                   |      |  |\n                   |      |  |\n                   |      |  |\n                   |  /\\  |  |\n                   | /| \\ |\\ |\n                   |/ |/ \\| \\|\n");
     printf("   4 HITS YOU WON!!!\n\n");
-    printf("It took you only %d guesses, you are a professional code breaker!\n\n", initialGuessAmount - guessesLeft + 1);
-
+    printf("It took you only %d guesses, you are a professional code breaker!\n", initialGuessAmount - guessesLeft + 1);
+    if (difficulty == CRAZY)
+    {
+        printf("good job on winning in the EXTREME difficulty! you were given %d guesses\n", initialGuessAmount);
+    }
+    printf("\n");
 }
 
 /*
